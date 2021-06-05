@@ -93,6 +93,9 @@ void GridMap::renderGrids(int grid_size) {
 void GridMap::isGridClicked(Grid *grid) {
   // add/remove obstacles
   if (editMapMode_) {
+    // if either place at start or goal, just return
+    if (grid == startGrid_ || grid == goalGrid_) return;
+
     if (grid->isOccupied())
       grid->setFree();
     else
