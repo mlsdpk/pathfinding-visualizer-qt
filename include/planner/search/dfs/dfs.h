@@ -1,5 +1,7 @@
 #pragma once
 
+#include <stack>
+
 #include "planner/planner.h"
 
 namespace planner {
@@ -12,6 +14,10 @@ class DFS : public Planner {
  private:
   void onInit() override;
   void search() override;
+
+  Vertex* startVertex_;
+  Vertex* goalVertex_;
+  std::stack<Vertex*> frontier_;
 
  private slots:
   void plan(const GridMap* gm) override;
