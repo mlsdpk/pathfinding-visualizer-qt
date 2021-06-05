@@ -16,7 +16,7 @@ GridMap::~GridMap() {
     delete grids_;
 }
 
-void GridMap::set_gridSize(int size) {
+void GridMap::setGridSize(int size) {
     gridSize_ = size;
 }
 
@@ -32,7 +32,7 @@ void GridMap::setStartConfigRadioButton(bool b) {
     isStartConfigButtonChecked_ = b;
 }
 
-int GridMap::get_gridSize() {
+int GridMap::getGridSize() const {
     return gridSize_;
 }
 
@@ -50,7 +50,7 @@ Grid *GridMap::getStartGrid() const {
 }
 
 void GridMap::renderGrids(int grid_size) {
-    set_gridSize(grid_size);
+    setGridSize(grid_size);
 
     // clear the grids
     grids_->clear();
