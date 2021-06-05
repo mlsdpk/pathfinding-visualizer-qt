@@ -4,18 +4,17 @@
 
 namespace planner {
 namespace search {
-class DFS: public Planner {
+class DFS : public Planner {
+ public:
+  DFS();
+  ~DFS();
 
-public:
-    DFS();
-    ~DFS();
+ private:
+  void onInit() override;
+  void search() override;
 
-private:
-    void onInit() override;
-    void search() override;
-
-private slots:
-    void plan(const GridMap* gm) override;
+ private slots:
+  void plan(const GridMap* gm) override;
 };
-}
-}
+}  // namespace search
+}  // namespace planner

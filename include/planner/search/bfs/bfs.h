@@ -6,23 +6,21 @@
 
 namespace planner {
 namespace search {
+class BFS : public Planner {
+ public:
+  BFS();
+  ~BFS();
 
-class BFS: public Planner {
-public:
-    BFS();
-    ~BFS();
+ private:
+  Vertex* startVertex_;
+  Vertex* goalVertex_;
+  std::queue<Vertex*> frontier_;
 
-private:
-    Vertex* startVertex_;
-    Vertex* goalVertex_;
-    std::queue<Vertex*> frontier_;
+  void onInit() override;
+  void search() override;
 
-    void onInit() override;
-    void search() override;
-
-private slots:
-    void plan(const GridMap* gm) override;
+ private slots:
+  void plan(const GridMap* gm) override;
 };
-
-}
-}
+}  // namespace search
+}  // namespace planner
