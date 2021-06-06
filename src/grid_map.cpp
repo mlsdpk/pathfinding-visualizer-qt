@@ -66,6 +66,15 @@ void GridMap::generateObstacles(int n) {
   }
 }
 
+void GridMap::clearObstacles() {
+  for (int i = 0; i < grids_->size(); i++) {
+    if (grids_->at(i)->isOccupied()) {
+      grids_->at(i)->setFree();
+      freeSpaceIdxs_.append(i);
+    }
+  }
+}
+
 void GridMap::renderGrids(int grid_size) {
   setGridSize(grid_size);
 

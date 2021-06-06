@@ -38,6 +38,9 @@ MainWindow::MainWindow(QWidget *parent)
   // generate obstacle push button
   ui->generateObstPushButton->setEnabled(false);
 
+  // clear obstacles push button
+  ui->clearObstPushButton->setEnabled(false);
+
   // place configuration mode pushbutton
   ui->placeConfigButton->setDefault(false);
 
@@ -132,6 +135,8 @@ void MainWindow::on_editMapButton_pressed() {
   ui->obstSpinBox->setEnabled(mapEditingMode_);
   // generate obstacle push button
   ui->generateObstPushButton->setEnabled(mapEditingMode_);
+  // clear obstacle push button
+  ui->clearObstPushButton->setEnabled(mapEditingMode_);
 
   ui->obstSpinBox->setMaximum(gridMap->getFreeSpaceIdxs().size());
 
@@ -145,6 +150,11 @@ void MainWindow::on_gridSlider_sliderReleased() {
 
 void MainWindow::on_generateObstPushButton_clicked() {
   gridMap->generateObstacles(ui->obstSpinBox->value());
+  ui->obstSpinBox->setMaximum(gridMap->getFreeSpaceIdxs().size());
+}
+
+void MainWindow::on_clearObstPushButton_clicked() {
+  gridMap->clearObstacles();
   ui->obstSpinBox->setMaximum(gridMap->getFreeSpaceIdxs().size());
 }
 

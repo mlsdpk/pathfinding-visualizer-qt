@@ -57,6 +57,9 @@ class GridMap : public QObject {
   /** \brief Randomly generate n number of obstacles in the map. */
   void generateObstacles(int n);
 
+  /** \brief Clear all obstacles in the map. */
+  void clearObstacles();
+
  public slots:
   /** \brief Slot function for rendering grids. */
   void renderGrids(int grid_size);
