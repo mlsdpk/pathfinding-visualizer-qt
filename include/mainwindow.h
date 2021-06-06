@@ -37,6 +37,8 @@ class MainWindow : public QMainWindow {
  private slots:
 
   /** \brief GUI slot functions. */
+  void on_gridSlider_sliderReleased();
+  void on_generateObstPushButton_clicked();
   void on_animationCheckBox_stateChanged(int arg1);
   void on_animationSpeedSlider_valueChanged(int value);
   void on_comboBox_currentTextChanged(const QString &arg1);

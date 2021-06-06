@@ -33,8 +33,17 @@ class GridMap : public QObject {
   /** \brief Whether start config radio button is selected or not. */
   void setStartConfigRadioButton(bool b);
 
+  /** \brief Set total number of grids in the map. */
+  void setNumberOfGrids(int n);
+
   /** \brief Get the current grid size of the map. */
   int getGridSize() const;
+
+  /** \brief Get total number of grids in the map. */
+  int getNumberOfGrids() const;
+
+  /** \brief Get free space indexes in the map. */
+  QList<int> getFreeSpaceIdxs() const;
 
   /** \brief Get all the grids in the map as const list pointer. */
   const QList<Grid *> *getGridsList() const;
@@ -44,6 +53,9 @@ class GridMap : public QObject {
 
   /** \brief Get the pointer to start grid in the map. */
   Grid *getStartGrid() const;
+
+  /** \brief Randomly generate n number of obstacles in the map. */
+  void generateObstacles(int n);
 
  public slots:
   /** \brief Slot function for rendering grids. */
@@ -57,6 +69,9 @@ class GridMap : public QObject {
   /** \brief Grid size of the map. */
   int gridSize_;
 
+  /** \brief Total number of grids the map. */
+  int numberOfGrids_;
+
   /** \brief Pointer to start grid in the map. */
   Grid *startGrid_;
 
@@ -65,6 +80,9 @@ class GridMap : public QObject {
 
   /** \brief Pointer to list of all the grids in the map. */
   QList<Grid *> *grids_;
+
+  /** \brief List of free space indexes in the map. */
+  QList<int> freeSpaceIdxs_;
 
   /** \brief Qt Graphics scene object. */
   QGraphicsScene *scene_;
