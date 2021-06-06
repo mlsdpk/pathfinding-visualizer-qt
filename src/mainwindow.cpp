@@ -32,6 +32,15 @@ MainWindow::MainWindow(QWidget *parent)
   // map editing mode pushbutton
   ui->editMapButton->setDefault(false);
 
+  // obstacle number spinbox
+  ui->obstSpinBox->setEnabled(false);
+
+  // generate obstacle push button
+  ui->generateObstPushButton->setEnabled(false);
+
+  // clear obstacles push button
+  ui->clearObstPushButton->setEnabled(false);
+
   // place configuration mode pushbutton
   ui->placeConfigButton->setDefault(false);
 
@@ -65,6 +74,13 @@ MainWindow::MainWindow(QWidget *parent)
   connect(ui->gridSlider, SIGNAL(valueChanged(int)), gridMap,
           SLOT(renderGrids(int)));
   ////////////////////////////////
+
+  ////////////////////////////////
+  /// obstacle number spinbox
+  ////////////////////////////////
+  // set initial minimum and maximum values for spinbox
+  ui->obstSpinBox->setMinimum(0);
+  ui->obstSpinBox->setMaximum(gridMap->getFreeSpaceIdxs().size());
 
   ////////////////////////////////
   /// algorithm combobox
@@ -115,9 +131,31 @@ void MainWindow::on_editMapButton_pressed() {
   ui->animationCheckBox->setEnabled(!mapEditingMode_);
   // animation speed slider
   ui->animationSpeedSlider->setEnabled(!mapEditingMode_);
+  // obstacle number spinbox
+  ui->obstSpinBox->setEnabled(mapEditingMode_);
+  // generate obstacle push button
+  ui->generateObstPushButton->setEnabled(mapEditingMode_);
+  // clear obstacle push button
+  ui->clearObstPushButton->setEnabled(mapEditingMode_);
+
+  ui->obstSpinBox->setMaximum(gridMap->getFreeSpaceIdxs().size());
 
   // pass edit mode to grid map
   gridMap->setEditingMapMode(mapEditingMode_);
+}
+
+void MainWindow::on_gridSlider_sliderReleased() {
+  ui->obstSpinBox->setMaximum(gridMap->getFreeSpaceIdxs().size());
+}
+
+void MainWindow::on_generateObstPushButton_clicked() {
+  gridMap->generateObstacles(ui->obstSpinBox->value());
+  ui->obstSpinBox->setMaximum(gridMap->getFreeSpaceIdxs().size());
+}
+
+void MainWindow::on_clearObstPushButton_clicked() {
+  gridMap->clearObstacles();
+  ui->obstSpinBox->setMaximum(gridMap->getFreeSpaceIdxs().size());
 }
 
 // place configuration mode slot
