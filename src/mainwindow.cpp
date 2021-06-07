@@ -57,9 +57,9 @@ MainWindow::MainWindow(QWidget *parent)
   ////////////////////////////////
   // set minimum and maximum values of slider
   // map size - 500x500
-  // max grid numbers = 100x100
+  // max grid numbers = 50x50
   // min grid numbers = 2x2
-  ui->gridSlider->setMinimum(5);
+  ui->gridSlider->setMinimum(10);
   ui->gridSlider->setMaximum(250);
   ui->gridSlider->setTickInterval(5);
   ui->gridSlider->setSingleStep(5);
@@ -220,16 +220,14 @@ void MainWindow::receiveChildParentIdxs(
     // render visited grids
     for (auto idx : visitedVerticesIdxOrder_) {
       if (idx != goalKeyIdx_){
-        gridMap->getGridsList()->at(idx)->setOpacity(1);
+        gridMap->getGridsList()->at(idx)->setVisitedGraphicsEffect();
       }
      }
     // render path
     while (childParentIdxs_[currentPathKeyIdx_] != startKeyIdx_) {
       // find the parent vertex of current key (child)
       currentPathKeyIdx_ = childParentIdxs_[currentPathKeyIdx_];
-      gridMap->getGridsList()
-          ->at(currentPathKeyIdx_)
-          ->setOpacity(0.2);
+      gridMap->getGridsList()->at(currentPathKeyIdx_)->setPathColor();
     }
   }
 }
@@ -244,42 +242,19 @@ void MainWindow::visualize() {
       if (visualizationCurrentIdx_ <= visitedVerticesIdxOrder_.size() - 1) {
         // skip the goal vertex
         if (visitedVerticesIdxOrder_.at(visualizationCurrentIdx_) !=
-            goalKeyIdx_){
-
+            goalKeyIdx_) {
           gridMap->getGridsList()
               ->at(visitedVerticesIdxOrder_.at(visualizationCurrentIdx_))
-              ->setBrush(QBrush(QColor(200, 200, 200, 245), Qt::SolidPattern));
-
-          gridMap->getGridsList()
-              ->at(visitedVerticesIdxOrder_.at(visualizationCurrentIdx_))
-              ->setOpacity(1);
-
-          // create shadoweffect obj
-          QGraphicsDropShadowEffect *dps = new QGraphicsDropShadowEffect;
-          dps->setColor(QColor(40, 40, 40, 245));
-          dps->setOffset(1,1);
-          dps->setBlurRadius(10);
-
-          gridMap->getGridsList()
-              ->at(visitedVerticesIdxOrder_.at(visualizationCurrentIdx_))
-              ->setGraphicsEffect(dps);
+              ->setVisitedGraphicsEffect();
         }
 
-         visualizationCurrentIdx_++;
+        visualizationCurrentIdx_++;
       }
       // if done, visualize solution path until it reaches start vertex
       else if (childParentIdxs_[currentPathKeyIdx_] != startKeyIdx_) {
         // find the parent vertex of current key (child)
         currentPathKeyIdx_ = childParentIdxs_[currentPathKeyIdx_];
-
-        // grid styling
-        gridMap->getGridsList()
-            ->at(currentPathKeyIdx_)
-            ->setBrush(QBrush(QColor(150, 150, 150,200), Qt::SolidPattern));
-
-        gridMap->getGridsList()
-            ->at(currentPathKeyIdx_)
-            ->setOpacity(1);
+        gridMap->getGridsList()->at(currentPathKeyIdx_)->setPathColor();
       }
     }
   }
@@ -327,8 +302,7 @@ void MainWindow::on_comboBox_currentTextChanged(const QString &arg1) {
   connect(planner_.get(),
           SIGNAL(sendChildParentIdxs(const std::unordered_map<int, int> *)),
           this,
-          SLOT(receiveChildParentIdxs(const std::unordered_map<int, int> *)),
-          Qt::DirectConnection);
+          SLOT(receiveChildParentIdxs(const std::unordered_map<int, int> *)));
 
   // move the current planner onto the thread
   // and initialize the algorithm
@@ -404,20 +378,7 @@ void MainWindow::on_resetButton_clicked() {
   // remove all the rendered path and visited vertices
   for (auto idx : visitedVerticesIdxOrder_) {
     if (idx != goalKeyIdx_)
-      gridMap->getGridsList()->at(idx)->setBrush(
-          QBrush(QColor(240, 240, 240, 245), Qt::SolidPattern));
-      gridMap->getGridsList()->at(idx)->setScale(0.8);
-      gridMap->getGridsList()->at(idx)->setOpacity(0.8);
-
-      // create shadoweffect obj
-      QGraphicsDropShadowEffect *dps = new QGraphicsDropShadowEffect;
-      dps->setColor(QColor(150, 150, 150, 245));
-      dps->setOffset(1,1);
-      dps->setBlurRadius(5);
-
-      gridMap->getGridsList()
-          ->at(idx)
-          ->setGraphicsEffect(dps);
+      gridMap->getGridsList()->at(idx)->setFreeSpaceGraphicsEffect();
   }
 
   // clear visualization related stuffs
