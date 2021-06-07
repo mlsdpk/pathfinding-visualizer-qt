@@ -108,9 +108,6 @@ void GridMap::renderGrids(int grid_size) {
       // set pos and size
       g->setRect(0, 0, v, v);
       g->setPos(-5 + row * v, -5 + col * v);
-      g->setBrush(QBrush(QColor(240, 240, 240, 245)));
-      g->setOpacity(0.8);
-      g->setScale(0.8);
       grids_->append(g);
       scene_->addItem(g);
       freeSpaceIdxs_.append(freeSpaceIdx);

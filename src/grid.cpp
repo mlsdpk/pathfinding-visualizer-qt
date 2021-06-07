@@ -13,6 +13,9 @@ Grid::Grid(QObject *parent)
   e->setOffset(1,1);
   e->setBlurRadius(5);
   setGraphicsEffect(e);
+  setBrush(QBrush(QColor(240, 240, 240, 245)));
+  setOpacity(0.8);
+  setScale(0.8);
 
   connect(this, SIGNAL(mouseClicked(Grid *)), parent,
           SLOT(isGridClicked(Grid *)));
