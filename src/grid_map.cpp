@@ -106,7 +106,8 @@ void GridMap::renderGrids(int grid_size) {
       Grid *g = new Grid(this);
       // set pos and size
       g->setRect(0, 0, v, v);
-      g->setPos(0 + row * v, 0 + col * v);
+      g->setPos(-5 + row * v, -5 + col * v);
+      g->setScale(0.8);
       grids_->append(g);
       scene_->addItem(g);
       freeSpaceIdxs_.append(freeSpaceIdx);
