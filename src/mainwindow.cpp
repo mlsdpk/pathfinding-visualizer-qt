@@ -219,17 +219,33 @@ void MainWindow::receiveChildParentIdxs(
   if (!animatePlanning_) {
     // render visited grids
     for (auto idx : visitedVerticesIdxOrder_) {
-      if (idx != goalKeyIdx_)
+      if (idx != goalKeyIdx_) {
         gridMap->getGridsList()->at(idx)->setBrush(
-            QBrush(Qt::blue, Qt::SolidPattern));
-    }
+            QBrush(QColor(200, 200, 200, 245), Qt::SolidPattern));
+
+        gridMap->getGridsList()->at(idx)->setOpacity(1);
+
+        // create shadoweffect obj
+        QGraphicsDropShadowEffect *dps = new QGraphicsDropShadowEffect;
+        dps->setColor(QColor(40, 40, 40, 245));
+        dps->setOffset(1,1);
+        dps->setBlurRadius(10);
+
+        gridMap->getGridsList()->at(idx)->setGraphicsEffect(dps);
+        }
+     }
     // render path
     while (childParentIdxs_[currentPathKeyIdx_] != startKeyIdx_) {
       // find the parent vertex of current key (child)
       currentPathKeyIdx_ = childParentIdxs_[currentPathKeyIdx_];
+      // grid styling
       gridMap->getGridsList()
           ->at(currentPathKeyIdx_)
-          ->setBrush(QBrush(Qt::gray, Qt::SolidPattern));
+          ->setBrush(QBrush(QColor(150, 150, 150,200), Qt::SolidPattern));
+
+      gridMap->getGridsList()
+          ->at(currentPathKeyIdx_)
+          ->setOpacity(1);
     }
   }
 }
@@ -244,19 +260,42 @@ void MainWindow::visualize() {
       if (visualizationCurrentIdx_ <= visitedVerticesIdxOrder_.size() - 1) {
         // skip the goal vertex
         if (visitedVerticesIdxOrder_.at(visualizationCurrentIdx_) !=
-            goalKeyIdx_)
+            goalKeyIdx_){
+
           gridMap->getGridsList()
               ->at(visitedVerticesIdxOrder_.at(visualizationCurrentIdx_))
-              ->setBrush(QBrush(Qt::blue, Qt::SolidPattern));
-        visualizationCurrentIdx_++;
+              ->setBrush(QBrush(QColor(200, 200, 200, 245), Qt::SolidPattern));
+
+          gridMap->getGridsList()
+              ->at(visitedVerticesIdxOrder_.at(visualizationCurrentIdx_))
+              ->setOpacity(1);
+
+          // create shadoweffect obj
+          QGraphicsDropShadowEffect *dps = new QGraphicsDropShadowEffect;
+          dps->setColor(QColor(40, 40, 40, 245));
+          dps->setOffset(1,1);
+          dps->setBlurRadius(10);
+
+          gridMap->getGridsList()
+              ->at(visitedVerticesIdxOrder_.at(visualizationCurrentIdx_))
+              ->setGraphicsEffect(dps);
+        }
+
+         visualizationCurrentIdx_++;
       }
       // if done, visualize solution path until it reaches start vertex
       else if (childParentIdxs_[currentPathKeyIdx_] != startKeyIdx_) {
         // find the parent vertex of current key (child)
         currentPathKeyIdx_ = childParentIdxs_[currentPathKeyIdx_];
+
+        // grid styling
         gridMap->getGridsList()
             ->at(currentPathKeyIdx_)
-            ->setBrush(QBrush(Qt::gray, Qt::SolidPattern));
+            ->setBrush(QBrush(QColor(150, 150, 150,200), Qt::SolidPattern));
+
+        gridMap->getGridsList()
+            ->at(currentPathKeyIdx_)
+            ->setOpacity(1);
       }
     }
   }
@@ -382,7 +421,19 @@ void MainWindow::on_resetButton_clicked() {
   for (auto idx : visitedVerticesIdxOrder_) {
     if (idx != goalKeyIdx_)
       gridMap->getGridsList()->at(idx)->setBrush(
-          QBrush(Qt::white, Qt::SolidPattern));
+          QBrush(QColor(240, 240, 240, 245), Qt::SolidPattern));
+      gridMap->getGridsList()->at(idx)->setScale(0.8);
+      gridMap->getGridsList()->at(idx)->setOpacity(0.8);
+
+      // create shadoweffect obj
+      QGraphicsDropShadowEffect *dps = new QGraphicsDropShadowEffect;
+      dps->setColor(QColor(150, 150, 150, 245));
+      dps->setOffset(1,1);
+      dps->setBlurRadius(5);
+
+      gridMap->getGridsList()
+          ->at(idx)
+          ->setGraphicsEffect(dps);
   }
 
   // clear visualization related stuffs

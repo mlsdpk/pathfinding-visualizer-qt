@@ -38,7 +38,7 @@ void Grid::setFree() {
 
   QBrush brush;
   brush.setStyle(Qt::SolidPattern);
-  brush.setColor(Qt::white);
+  brush.setColor(QColor(240, 240, 240,245));
   setBrush(brush);
 }
 

@@ -102,11 +102,22 @@ void GridMap::renderGrids(int grid_size) {
   int freeSpaceIdx = 0;
   for (int col = 0; col < no_of_row_grids_; col++) {
     for (int row = 0; row < no_of_row_grids_; row++) {
+
+      // create shadoweffect obj
+      QGraphicsDropShadowEffect *e = new QGraphicsDropShadowEffect;
+      e->setColor(QColor(150,150,150,245));
+      e->setOffset(1,1);
+      e->setBlurRadius(5);
+
       // create grid obj
       Grid *g = new Grid(this);
+
       // set pos and size
       g->setRect(0, 0, v, v);
+      g->setGraphicsEffect(e);
       g->setPos(-5 + row * v, -5 + col * v);
+      g->setBrush(QBrush(QColor(240, 240, 240, 245)));
+      g->setOpacity(0.8);
       g->setScale(0.8);
       grids_->append(g);
       scene_->addItem(g);
