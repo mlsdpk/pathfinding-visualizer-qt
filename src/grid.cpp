@@ -6,6 +6,14 @@
 Grid::Grid(QObject *parent)
     : QObject(parent), isOccupied_{false}, isStart_{false}, isGoal_{false} {
   setRect(0, 0, 100, 100);
+
+  // create shadoweffect obj
+  QGraphicsDropShadowEffect *e = new QGraphicsDropShadowEffect;
+  e->setColor(QColor(150,150,150,245));
+  e->setOffset(1,1);
+  e->setBlurRadius(5);
+  setGraphicsEffect(e);
+
   connect(this, SIGNAL(mouseClicked(Grid *)), parent,
           SLOT(isGridClicked(Grid *)));
 }

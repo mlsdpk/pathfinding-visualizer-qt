@@ -219,20 +219,18 @@ void MainWindow::receiveChildParentIdxs(
   if (!animatePlanning_) {
     // render visited grids
     for (auto idx : visitedVerticesIdxOrder_) {
-      if (idx != goalKeyIdx_) {
+      if (idx != goalKeyIdx_)
+        // create shadoweffect obj
+//        QGraphicsDropShadowEffect *dps = new QGraphicsDropShadowEffect;
+//        dps->setColor(QColor(40, 40, 40, 245));
+//        dps->setOffset(1,1);
+//        dps->setBlurRadius(10);
+
+//        gridMap->getGridsList()->at(idx)->setGraphicsEffect(dps);
+
         gridMap->getGridsList()->at(idx)->setBrush(
             QBrush(QColor(200, 200, 200, 245), Qt::SolidPattern));
 
-        gridMap->getGridsList()->at(idx)->setOpacity(1);
-
-        // create shadoweffect obj
-        QGraphicsDropShadowEffect *dps = new QGraphicsDropShadowEffect;
-        dps->setColor(QColor(40, 40, 40, 245));
-        dps->setOffset(1,1);
-        dps->setBlurRadius(10);
-
-        gridMap->getGridsList()->at(idx)->setGraphicsEffect(dps);
-        }
      }
     // render path
     while (childParentIdxs_[currentPathKeyIdx_] != startKeyIdx_) {

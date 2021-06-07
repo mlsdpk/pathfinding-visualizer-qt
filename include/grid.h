@@ -2,6 +2,7 @@
 
 #include <QGraphicsRectItem>
 #include <QGraphicsSceneMouseEvent>
+#include <QGraphicsDropShadowEffect>
 #include <QList>
 #include <QObject>
 
