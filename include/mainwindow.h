@@ -2,6 +2,7 @@
 
 #include <QDebug>
 #include <QGraphicsScene>
+#include <QGraphicsDropShadowEffect>
 #include <QList>
 #include <QMainWindow>
 #include <QThread>

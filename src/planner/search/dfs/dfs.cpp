@@ -1,6 +1,7 @@
 #include "planner/search/dfs/dfs.h"
 
 #include <iostream>
+#include <cmath>
 
 planner::search::DFS::DFS() : Planner() {
   std::cout << "DFS created: " << this << std::endl;

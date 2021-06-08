@@ -1,9 +1,12 @@
 #pragma once
 
+#include <QBrush>
+#include <QGraphicsDropShadowEffect>
 #include <QGraphicsRectItem>
 #include <QGraphicsSceneMouseEvent>
 #include <QList>
 #include <QObject>
+#include <iostream>
 
 /** \brief Grid class containing different states of the grid
  *  (occupied, free, start and goal). This class is inherited
@@ -58,6 +61,15 @@ class Grid : public QObject, public QGraphicsRectItem {
    *  This is used in combination with mousePressEvent for manipulating
    *  the state of the grid. */
   void setPlaceConfigMode(bool b);
+
+  /** \brief Set freespace graphics effect to this grid. */
+  void setFreeSpaceGraphicsEffect();
+
+  /** \brief Set visited graphics effect to this grid. */
+  void setVisitedGraphicsEffect();
+
+  /** \brief Set path color to this grid. */
+  void setPathColor();
 
  private:
   /** \brief Flag indicating whether grid is start configuration or not */

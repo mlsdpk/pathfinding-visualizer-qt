@@ -2,6 +2,7 @@
 
 #include <QGraphicsObject>
 #include <QGraphicsScene>
+#include <QGraphicsDropShadowEffect>
 #include <QList>
 #include <QObject>
 
