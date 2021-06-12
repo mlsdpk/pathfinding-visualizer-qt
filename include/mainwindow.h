@@ -1,8 +1,8 @@
 #pragma once
 
 #include <QDebug>
-#include <QGraphicsScene>
 #include <QGraphicsDropShadowEffect>
+#include <QGraphicsScene>
 #include <QList>
 #include <QMainWindow>
 #include <QThread>
@@ -18,6 +18,7 @@
 #include "planner/planner.h"
 #include "planner/search/bfs/bfs.h"
 #include "planner/search/dfs/dfs.h"
+#include "planner/search/dijkstra/dijkstra.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {

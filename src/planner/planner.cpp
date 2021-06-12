@@ -28,7 +28,13 @@ void planner::Planner::process() {
       // algorithm function will b here
       search();
       if (done_) {
-        std::cout << "Algorithm done!" << std::endl;
+        auto running_time =
+            std::chrono::duration_cast<std::chrono::milliseconds>(
+                std::chrono::system_clock::now() - init_time_)
+                .count();
+        std::cout << "Algorithm done in " << running_time << "ms!" << std::endl;
+        std::cout << "Number of visited vertices: "
+                  << visitedVerticesIdxOrder_.length() << std::endl;
         emit sendVisitedVerticesIdxOrder(&visitedVerticesIdxOrder_);
         emit sendChildParentIdxs(&childParentIdxs_);
       }

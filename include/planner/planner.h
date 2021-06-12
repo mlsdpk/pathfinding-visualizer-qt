@@ -14,6 +14,7 @@ struct Vertex {
   QPointF pos;
   Vertex* parent;
   QList<Vertex*> neighbours;
+  double gValue;
 };
 
 class Planner : public QObject {
@@ -32,6 +33,7 @@ class Planner : public QObject {
   QList<Vertex*> vertices_;
   QList<int> visitedVerticesIdxOrder_;
   std::unordered_map<int, int> childParentIdxs_;
+  std::chrono::system_clock::time_point init_time_;
 
  signals:
   void finished();

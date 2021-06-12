@@ -68,12 +68,16 @@ void planner::search::BFS::plan(const GridMap* gm) {
 
   initialized_ = true;
   std::cout << "BFS initialized!" << std::endl;
+
+  // get current time
+  init_time_ = std::chrono::system_clock::now();
 }
 
 void planner::search::BFS::search() {
   if (!frontier_.empty()) {
     Vertex* v = frontier_.front();
     v->isFrontier = false;
+    visitedVerticesIdxOrder_.append(vertices_.indexOf(v));
     frontier_.pop();
 
     if (v == goalVertex_) done_ = true;
@@ -81,10 +85,9 @@ void planner::search::BFS::search() {
     for (auto nb_ptr : v->neighbours) {
       if (!nb_ptr->isVisited && !nb_ptr->isObstacle) {
         nb_ptr->parent = v;
-        nb_ptr->isVisited = true;
         nb_ptr->isFrontier = true;
+        nb_ptr->isVisited = true;
         frontier_.push(nb_ptr);
-        visitedVerticesIdxOrder_.append(vertices_.indexOf(nb_ptr));
         childParentIdxs_[vertices_.indexOf(nb_ptr)] = vertices_.indexOf(v);
       }
     }
