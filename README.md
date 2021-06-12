@@ -35,8 +35,8 @@ The project is based on C++11 and Qt. This is currently an ongoing project and m
 ### Search-based planners
 - [x] BFS
 - [x] DFS
-- [ ] DIJKSTRA
-- [ ] A*
+- [x] DIJKSTRA
+- [x] A*
 - [ ] Bidirectional-A*
 - [ ] LPA*
 - [ ] D*

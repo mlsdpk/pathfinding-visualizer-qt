@@ -25,6 +25,7 @@ set(SOURCES
   src/planner/search/bfs/bfs.cpp
   src/planner/search/dfs/dfs.cpp
   src/planner/search/dijkstra/dijkstra.cpp
+  src/planner/search/astar/astar.cpp
 )
 
 set(MOC_HEADERS
@@ -35,6 +36,7 @@ set(MOC_HEADERS
   include/planner/search/bfs/bfs.h
   include/planner/search/dfs/dfs.h
   include/planner/search/dijkstra/dijkstra.h
+  include/planner/search/astar/astar.h
 )
 
 set(CMAKE_AUTOUIC_SEARCH_PATHS ui)
