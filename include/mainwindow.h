@@ -16,6 +16,7 @@
 #include "grid.h"
 #include "grid_map.h"
 #include "planner/planner.h"
+#include "planner/search/astar/astar.h"
 #include "planner/search/bfs/bfs.h"
 #include "planner/search/dfs/dfs.h"
 #include "planner/search/dijkstra/dijkstra.h"

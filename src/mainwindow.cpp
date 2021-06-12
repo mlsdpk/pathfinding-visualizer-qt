@@ -88,7 +88,7 @@ MainWindow::MainWindow(QWidget *parent)
   ui->comboBox->addItem("BFS");
   ui->comboBox->addItem("DFS");
   ui->comboBox->addItem("DIJKSTRA");
-  // ui->comboBox->addItem("A*");
+  ui->comboBox->addItem("A*");
   ////////////////////////////////
 
   ////////////////////////////////
@@ -279,6 +279,8 @@ void MainWindow::on_comboBox_currentTextChanged(const QString &arg1) {
     planner_.reset(new planner::search::DFS());
   } else if (arg1 == "DIJKSTRA") {
     planner_.reset(new planner::search::DIJKSTRA());
+  } else if (arg1 == "A*") {
+    planner_.reset(new planner::search::ASTAR());
   }
 
   // for RUN & RESET buttons
