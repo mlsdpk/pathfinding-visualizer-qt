@@ -87,7 +87,7 @@ MainWindow::MainWindow(QWidget *parent)
   ////////////////////////////////
   ui->comboBox->addItem("BFS");
   ui->comboBox->addItem("DFS");
-  // ui->comboBox->addItem("DIJKSTRA");
+  ui->comboBox->addItem("DIJKSTRA");
   // ui->comboBox->addItem("A*");
   ////////////////////////////////
 
@@ -219,7 +219,7 @@ void MainWindow::receiveChildParentIdxs(
   if (!animatePlanning_) {
     // render visited grids
     for (auto idx : visitedVerticesIdxOrder_) {
-      if (idx != goalKeyIdx_){
+      if (idx != startKeyIdx_ && idx != goalKeyIdx_) {
         gridMap->getGridsList()->at(idx)->setVisitedGraphicsEffect();
       }
      }
@@ -240,9 +240,11 @@ void MainWindow::visualize() {
     if (animatePlanning_) {
       // show all visited vertices
       if (visualizationCurrentIdx_ <= visitedVerticesIdxOrder_.size() - 1) {
-        // skip the goal vertex
+        // skip the start and goal vertex
         if (visitedVerticesIdxOrder_.at(visualizationCurrentIdx_) !=
-            goalKeyIdx_) {
+                goalKeyIdx_ &&
+            visitedVerticesIdxOrder_.at(visualizationCurrentIdx_) !=
+                startKeyIdx_) {
           gridMap->getGridsList()
               ->at(visitedVerticesIdxOrder_.at(visualizationCurrentIdx_))
               ->setVisitedGraphicsEffect();
@@ -275,6 +277,8 @@ void MainWindow::on_comboBox_currentTextChanged(const QString &arg1) {
     planner_.reset(new planner::search::BFS());
   } else if (arg1 == "DFS") {
     planner_.reset(new planner::search::DFS());
+  } else if (arg1 == "DIJKSTRA") {
+    planner_.reset(new planner::search::DIJKSTRA());
   }
 
   // for RUN & RESET buttons
@@ -377,7 +381,7 @@ void MainWindow::on_resetButton_clicked() {
 
   // remove all the rendered path and visited vertices
   for (auto idx : visitedVerticesIdxOrder_) {
-    if (idx != goalKeyIdx_)
+    if (idx != startKeyIdx_ && idx != goalKeyIdx_)
       gridMap->getGridsList()->at(idx)->setFreeSpaceGraphicsEffect();
   }
 
