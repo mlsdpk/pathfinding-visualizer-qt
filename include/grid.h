@@ -73,16 +73,16 @@ class Grid : public QObject, public QGraphicsRectItem {
 
  private:
   /** \brief Flag indicating whether grid is start configuration or not */
-  bool isStart_;
+  bool is_start_;
 
   /** \brief Flag indicating whether grid is goal configuration or not */
-  bool isGoal_;
+  bool is_goal_;
 
   /** \brief Flag indicating whether grid is occupied or not */
-  bool isOccupied_;
+  bool is_occupied_;
 
   /** \brief List object for neighbours' indexes of grid */
-  QList<int> neighboursIdxs_;
+  QList<int> neighbours_idxs_;
 
  protected:
   /** \brief Mouse press event listener */

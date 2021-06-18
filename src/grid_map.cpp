@@ -7,62 +7,62 @@
 #include <iostream>
 #include <random>
 
-GridMap::GridMap(int gridSize, QGraphicsScene *scene)
+GridMap::GridMap(int grid_size, QGraphicsScene *scene)
     : QObject(),
-      gridSize_{gridSize},
+      grid_size_{grid_size},
       grids_(new QList<Grid *>()),
       scene_{scene},
-      isStartConfigButtonChecked_{true},
-      placeConfigMode_{false},
-      editMapMode_{false} {}
+      is_start_config_button_checked_{true},
+      place_config_mode_{false},
+      edit_map_mode_{false} {}
 
 GridMap::~GridMap() { delete grids_; }
 
-void GridMap::setGridSize(int size) { gridSize_ = size; }
+void GridMap::setGridSize(int size) { grid_size_ = size; }
 
-void GridMap::setPlaceConfigMode(bool b) { placeConfigMode_ = b; }
+void GridMap::setPlaceConfigMode(bool b) { place_config_mode_ = b; }
 
-void GridMap::setEditingMapMode(bool b) { editMapMode_ = b; }
+void GridMap::setEditingMapMode(bool b) { edit_map_mode_ = b; }
 
 void GridMap::setStartConfigRadioButton(bool b) {
-  isStartConfigButtonChecked_ = b;
+  is_start_config_button_checked_ = b;
 }
 
-void GridMap::setNumberOfGrids(int n) { numberOfGrids_ = n; }
+void GridMap::setNumberOfGrids(int n) { number_of_grids_ = n; }
 
-int GridMap::getGridSize() const { return gridSize_; }
+int GridMap::getGridSize() const { return grid_size_; }
 
-int GridMap::getNumberOfGrids() const { return numberOfGrids_; }
+int GridMap::getNumberOfGrids() const { return number_of_grids_; }
 
-QList<int> GridMap::getFreeSpaceIdxs() const { return freeSpaceIdxs_; }
+QList<int> GridMap::getFreeSpaceIdxs() const { return free_space_idxs_; }
 
 const QList<Grid *> *GridMap::getGridsList() const { return grids_; }
 
-Grid *GridMap::getGoalGrid() const { return goalGrid_; }
+Grid *GridMap::getGoalGrid() const { return goal_grid_; }
 
-Grid *GridMap::getStartGrid() const { return startGrid_; }
+Grid *GridMap::getStartGrid() const { return start_grid_; }
 
 void GridMap::generateObstacles(int n) {
-  int randomIdx;
-  int obstCount = 0;
+  int random_idx;
+  int obst_count = 0;
   std::random_device rd;
   std::mt19937 gen(rd());
-  while (obstCount < n) {
+  while (obst_count < n) {
     // randomly generate index
     std::uniform_int_distribution<> dis(
-        0, std::distance(freeSpaceIdxs_.begin(), freeSpaceIdxs_.end()) - 1);
-    auto it = freeSpaceIdxs_.begin();
+        0, std::distance(free_space_idxs_.begin(), free_space_idxs_.end()) - 1);
+    auto it = free_space_idxs_.begin();
     std::advance(it, dis(gen));
-    randomIdx = *it;
+    random_idx = *it;
 
     // make the indexed grid as obstacle
-    grids_->at(randomIdx)->setOccupied();
+    grids_->at(random_idx)->setOccupied();
 
     // remove index from freespace indexes list
-    freeSpaceIdxs_.removeOne(randomIdx);
+    free_space_idxs_.removeOne(random_idx);
 
     // increment obstacle count
-    obstCount++;
+    obst_count++;
   }
 }
 
@@ -70,7 +70,7 @@ void GridMap::clearObstacles() {
   for (int i = 0; i < grids_->size(); i++) {
     if (grids_->at(i)->isOccupied()) {
       grids_->at(i)->setFree();
-      freeSpaceIdxs_.append(i);
+      free_space_idxs_.append(i);
     }
   }
 }
@@ -82,24 +82,24 @@ void GridMap::renderGrids(int grid_size) {
   grids_->clear();
 
   // clear free space indexes
-  freeSpaceIdxs_.clear();
+  free_space_idxs_.clear();
 
   // clear start and goal grid ptrs
-  startGrid_ = nullptr;
-  goalGrid_ = nullptr;
+  start_grid_ = nullptr;
+  goal_grid_ = nullptr;
 
   // clear the scene (also delete the objects)
   scene_->clear();
 
   // get grid size from slider value
-  int v = gridSize_;
+  int v = grid_size_;
   v = (int)(ceil(v / 5.0) * 5);
   int no_of_row_grids_ = (int)(ceil(500.0 / v));
 
   // setting total number of grids in the map
   setNumberOfGrids(no_of_row_grids_ * no_of_row_grids_);
 
-  int freeSpaceIdx = 0;
+  int free_space_idx = 0;
   for (int col = 0; col < no_of_row_grids_; col++) {
     for (int row = 0; row < no_of_row_grids_; row++) {
       // create grid obj
@@ -110,8 +110,8 @@ void GridMap::renderGrids(int grid_size) {
       g->setPos(-5 + row * v, -5 + col * v);
       grids_->append(g);
       scene_->addItem(g);
-      freeSpaceIdxs_.append(freeSpaceIdx);
-      freeSpaceIdx++;
+      free_space_idxs_.append(free_space_idx);
+      free_space_idx++;
     }
   }
 
@@ -135,16 +135,16 @@ void GridMap::renderGrids(int grid_size) {
   }
 
   // default start (top-left) and goal (bottom-right) configurations
-  int startIdx = 0;
-  int goalIdx =
+  int start_idx = 0;
+  int goal_idx =
       no_of_row_grids_ * (no_of_row_grids_ - 1) + (no_of_row_grids_ - 1);
-  startGrid_ = grids_->at(startIdx);
-  startGrid_->setStart();
-  goalGrid_ = grids_->at(goalIdx);
-  goalGrid_->setGoal();
+  start_grid_ = grids_->at(start_idx);
+  start_grid_->setStart();
+  goal_grid_ = grids_->at(goal_idx);
+  goal_grid_->setGoal();
 
-  freeSpaceIdxs_.removeOne(startIdx);
-  freeSpaceIdxs_.removeOne(goalIdx);
+  free_space_idxs_.removeOne(start_idx);
+  free_space_idxs_.removeOne(goal_idx);
 }
 
 void GridMap::isGridClicked(Grid *grid) {
@@ -152,50 +152,50 @@ void GridMap::isGridClicked(Grid *grid) {
   int idx = grids_->indexOf(grid);
 
   // add/remove obstacles
-  if (editMapMode_) {
+  if (edit_map_mode_) {
     // if either place at start or goal, just return
-    if (grid == startGrid_ || grid == goalGrid_) return;
+    if (grid == start_grid_ || grid == goal_grid_) return;
 
     if (grid->isOccupied()) {
       grid->setFree();
       // free space now
       // append this grid index into free space indexes
-      freeSpaceIdxs_.append(idx);
+      free_space_idxs_.append(idx);
     } else {
       grid->setOccupied();
       // otherwise, remove
-      freeSpaceIdxs_.removeOne(idx);
+      free_space_idxs_.removeOne(idx);
     }
   }
   // set start & goal configs
-  else if (placeConfigMode_) {
+  else if (place_config_mode_) {
     // if place at obst grid, just return
     if (grid->isOccupied()) return;
 
     // if either place at start or goal, just return
-    if (grid == startGrid_ || grid == goalGrid_) return;
+    if (grid == start_grid_ || grid == goal_grid_) return;
 
     // if start config radio button is checked
-    if (isStartConfigButtonChecked_) {
+    if (is_start_config_button_checked_) {
       // make previous start grid to be empty
-      if (startGrid_) {
-        startGrid_->setFree();
-        freeSpaceIdxs_.append(grids_->indexOf(startGrid_));
+      if (start_grid_) {
+        start_grid_->setFree();
+        free_space_idxs_.append(grids_->indexOf(start_grid_));
       }
       // make this grid to be start grid
       grid->setStart();
-      freeSpaceIdxs_.removeOne(idx);
-      startGrid_ = grid;
+      free_space_idxs_.removeOne(idx);
+      start_grid_ = grid;
     } else {
       // make previous goal grid to be empty
-      if (goalGrid_) {
-        goalGrid_->setFree();
-        freeSpaceIdxs_.append(grids_->indexOf(goalGrid_));
+      if (goal_grid_) {
+        goal_grid_->setFree();
+        free_space_idxs_.append(grids_->indexOf(goal_grid_));
       }
       // make this grid to be goal grid
       grid->setGoal();
-      freeSpaceIdxs_.removeOne(idx);
-      goalGrid_ = grid;
+      free_space_idxs_.removeOne(idx);
+      goal_grid_ = grid;
     }
   }
 }

@@ -34,9 +34,9 @@ void planner::Planner::process() {
                 .count();
         std::cout << "Algorithm done in " << running_time << "ms!" << std::endl;
         std::cout << "Number of visited vertices: "
-                  << visitedVerticesIdxOrder_.length() << std::endl;
-        emit sendVisitedVerticesIdxOrder(&visitedVerticesIdxOrder_);
-        emit sendChildParentIdxs(&childParentIdxs_);
+                  << visited_vertices_idx_order_.length() << std::endl;
+        emit sendVisitedVerticesIdxOrder(&visited_vertices_idx_order_);
+        emit sendChildParentIdxs(&child_parent_idxs_);
       }
     }
     if (reseted_) {

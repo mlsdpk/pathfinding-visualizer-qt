@@ -30,8 +30,8 @@ void planner::search::ASTAR::plan(const GridMap* gm) {
   // clear and delete the vertices
   while (!vertices_.isEmpty()) delete vertices_.takeFirst();
 
-  visitedVerticesIdxOrder_.clear();
-  childParentIdxs_.clear();
+  visited_vertices_idx_order_.clear();
+  child_parent_idxs_.clear();
 
   // create graph with vertices using grid map
   for (auto g : *(gm->getGridsList())) {
@@ -42,9 +42,9 @@ void planner::search::ASTAR::plan(const GridMap* gm) {
     vertices_.append(vertex);
 
     if (g->isStart())
-      startVertex_ = vertex;
+      start_vertex_ = vertex;
     else if (g->isGoal())
-      goalVertex_ = vertex;
+      goal_vertex_ = vertex;
   }
 
   // find number of vertex in each row/col
@@ -75,11 +75,11 @@ void planner::search::ASTAR::plan(const GridMap* gm) {
   }
 
   // add start vertex into frontier
-  startVertex_->isVisited = true;
-  startVertex_->gValue = 0.0;
-  startVertex_->key = std::make_pair(L2_Distance(startVertex_, goalVertex_),
-                                     startVertex_->gValue);
-  frontier_.push(startVertex_);
+  start_vertex_->isVisited = true;
+  start_vertex_->gValue = 0.0;
+  start_vertex_->key = std::make_pair(L2_Distance(start_vertex_, goal_vertex_),
+                                      start_vertex_->gValue);
+  frontier_.push(start_vertex_);
 
   initialized_ = true;
   std::cout << "A* initialized!" << std::endl;
@@ -91,10 +91,10 @@ void planner::search::ASTAR::plan(const GridMap* gm) {
 void planner::search::ASTAR::search() {
   if (!frontier_.empty()) {
     Vertex* v = frontier_.top();
-    visitedVerticesIdxOrder_.append(vertices_.indexOf(v));
+    visited_vertices_idx_order_.append(vertices_.indexOf(v));
     frontier_.pop();
 
-    if (v == goalVertex_) done_ = true;
+    if (v == goal_vertex_) done_ = true;
 
     for (auto nb_ptr : v->neighbours) {
       if (!nb_ptr->isVisited && !nb_ptr->isObstacle) {
@@ -110,10 +110,10 @@ void planner::search::ASTAR::search() {
 
           // calculate key
           nb_ptr->key =
-              std::make_pair(nb_ptr->gValue + L2_Distance(nb_ptr, goalVertex_),
+              std::make_pair(nb_ptr->gValue + L2_Distance(nb_ptr, goal_vertex_),
                              nb_ptr->gValue);
           frontier_.push(nb_ptr);
-          childParentIdxs_[vertices_.indexOf(nb_ptr)] = vertices_.indexOf(v);
+          child_parent_idxs_[vertices_.indexOf(nb_ptr)] = vertices_.indexOf(v);
         }
       }
     }

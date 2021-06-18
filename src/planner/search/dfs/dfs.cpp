@@ -19,8 +19,8 @@ void planner::search::DFS::plan(const GridMap *gm) {
   // clear and delete the vertices
   while (!vertices_.isEmpty()) delete vertices_.takeFirst();
 
-  visitedVerticesIdxOrder_.clear();
-  childParentIdxs_.clear();
+  visited_vertices_idx_order_.clear();
+  child_parent_idxs_.clear();
 
   // create graph with vertices using grid map
   for (auto g : *(gm->getGridsList())) {
@@ -30,9 +30,9 @@ void planner::search::DFS::plan(const GridMap *gm) {
     vertices_.append(vertex);
 
     if (g->isStart())
-      startVertex_ = vertex;
+      start_vertex_ = vertex;
     else if (g->isGoal())
-      goalVertex_ = vertex;
+      goal_vertex_ = vertex;
   }
 
   // find number of vertex in each row/col
@@ -63,8 +63,8 @@ void planner::search::DFS::plan(const GridMap *gm) {
   }
 
   // add start vertex into frontier
-  startVertex_->isVisited = true;
-  frontier_.push(startVertex_);
+  start_vertex_->isVisited = true;
+  frontier_.push(start_vertex_);
 
   initialized_ = true;
   std::cout << "DFS initialized!" << std::endl;
@@ -79,7 +79,7 @@ void planner::search::DFS::search() {
     v->isFrontier = false;
     frontier_.pop();
 
-    if (v == goalVertex_) done_ = true;
+    if (v == goal_vertex_) done_ = true;
 
     for (auto nb_ptr : v->neighbours) {
       if (!nb_ptr->isVisited && !nb_ptr->isObstacle) {
@@ -87,8 +87,8 @@ void planner::search::DFS::search() {
         nb_ptr->isVisited = true;
         nb_ptr->isFrontier = true;
         frontier_.push(nb_ptr);
-        visitedVerticesIdxOrder_.append(vertices_.indexOf(nb_ptr));
-        childParentIdxs_[vertices_.indexOf(nb_ptr)] = vertices_.indexOf(v);
+        visited_vertices_idx_order_.append(vertices_.indexOf(nb_ptr));
+        child_parent_idxs_[vertices_.indexOf(nb_ptr)] = vertices_.indexOf(v);
       }
     }
 

@@ -15,8 +15,8 @@ class DFS : public Planner {
   void onInit() override;
   void search() override;
 
-  Vertex* startVertex_;
-  Vertex* goalVertex_;
+  Vertex* start_vertex_;
+  Vertex* goal_vertex_;
   std::stack<Vertex*> frontier_;
 
  private slots:

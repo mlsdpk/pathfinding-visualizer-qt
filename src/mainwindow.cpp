@@ -8,48 +8,48 @@
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent),
-      ui(new Ui::MainWindow),
-      mapEditingMode_{false},
-      placeConfigMode_{false},
-      isGuiReset_{true} {
-  ui->setupUi(this);
+      ui_(new Ui::MainWindow),
+      map_editing_mode_{false},
+      place_config_mode_{false},
+      is_gui_reset_{true} {
+  ui_->setupUi(this);
 
-  // create scene object and pass it to ui
-  // defaut gui parameters for now
-  scene = new QGraphicsScene(this);
-  scene->setSceneRect(0, 0, 500, 500);
-  ui->graphicsView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-  ui->graphicsView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-  ui->graphicsView->setScene(scene);
+  // create scene object and pass it to ui_
+  // defaut gui_ parameters for now
+  scene_ = new QGraphicsScene(this);
+  scene_->setSceneRect(0, 0, 500, 500);
+  ui_->graphicsView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+  ui_->graphicsView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+  ui_->graphicsView->setScene(scene_);
 
   ////////////////////////////////////
   /// buttons inital configurations
   ////////////////////////////////////
 
   // disable the RESET button
-  ui->resetButton->setEnabled(false);
+  ui_->resetButton->setEnabled(false);
 
   // map editing mode pushbutton
-  ui->editMapButton->setDefault(false);
+  ui_->editMapButton->setDefault(false);
 
   // obstacle number spinbox
-  ui->obstSpinBox->setEnabled(false);
+  ui_->obstSpinBox->setEnabled(false);
 
   // generate obstacle push button
-  ui->generateObstPushButton->setEnabled(false);
+  ui_->generateObstPushButton->setEnabled(false);
 
   // clear obstacles push button
-  ui->clearObstPushButton->setEnabled(false);
+  ui_->clearObstPushButton->setEnabled(false);
 
   // place configuration mode pushbutton
-  ui->placeConfigButton->setDefault(false);
+  ui_->placeConfigButton->setDefault(false);
 
   // start config radio button
-  ui->startConfigRadioButton->setChecked(true);
-  ui->startConfigRadioButton->setEnabled(false);
+  ui_->startConfigRadioButton->setChecked(true);
+  ui_->startConfigRadioButton->setEnabled(false);
 
   // goal config radio button
-  ui->goalConfigRadioButton->setEnabled(false);
+  ui_->goalConfigRadioButton->setEnabled(false);
   ////////////////////////////////////
 
   ////////////////////////////////
@@ -59,19 +59,19 @@ MainWindow::MainWindow(QWidget *parent)
   // map size - 500x500
   // max grid numbers = 50x50
   // min grid numbers = 2x2
-  ui->gridSlider->setMinimum(10);
-  ui->gridSlider->setMaximum(250);
-  ui->gridSlider->setTickInterval(5);
-  ui->gridSlider->setSingleStep(5);
-  ui->gridSlider->setEnabled(false);
+  ui_->gridSlider->setMinimum(10);
+  ui_->gridSlider->setMaximum(250);
+  ui_->gridSlider->setTickInterval(5);
+  ui_->gridSlider->setSingleStep(5);
+  ui_->gridSlider->setEnabled(false);
 
   // setting default grid size (50px)
   int grid_size = 50;
-  ui->gridSlider->setValue(grid_size);
+  ui_->gridSlider->setValue(grid_size);
 
-  gridMap = new GridMap(grid_size, scene);
-  gridMap->renderGrids(grid_size);
-  connect(ui->gridSlider, SIGNAL(valueChanged(int)), gridMap,
+  grid_map_ = new GridMap(grid_size, scene_);
+  grid_map_->renderGrids(grid_size);
+  connect(ui_->gridSlider, SIGNAL(valueChanged(int)), grid_map_,
           SLOT(renderGrids(int)));
   ////////////////////////////////
 
@@ -79,155 +79,155 @@ MainWindow::MainWindow(QWidget *parent)
   /// obstacle number spinbox
   ////////////////////////////////
   // set initial minimum and maximum values for spinbox
-  ui->obstSpinBox->setMinimum(0);
-  ui->obstSpinBox->setMaximum(gridMap->getFreeSpaceIdxs().size());
+  ui_->obstSpinBox->setMinimum(0);
+  ui_->obstSpinBox->setMaximum(grid_map_->getFreeSpaceIdxs().size());
 
   ////////////////////////////////
   /// algorithm combobox
   ////////////////////////////////
-  ui->comboBox->addItem("BFS");
-  ui->comboBox->addItem("DFS");
-  ui->comboBox->addItem("DIJKSTRA");
-  ui->comboBox->addItem("A*");
+  ui_->comboBox->addItem("BFS");
+  ui_->comboBox->addItem("DFS");
+  ui_->comboBox->addItem("DIJKSTRA");
+  ui_->comboBox->addItem("A*");
   ////////////////////////////////
 
   ////////////////////////////////
   /// visualization related
   ////////////////////////////////
-  connect(&visualizationTimer, SIGNAL(timeout()), this, SLOT(visualize()));
-  visualizationCurrentIdx_ = 0;
+  connect(&visualization_timer_, SIGNAL(timeout()), this, SLOT(visualize()));
+  visualization_current_idx_ = 0;
 
-  ui->animationSpeedSlider->setRange(1, 100);
-  ui->animationSpeedSlider->setValue(50);
+  ui_->animationSpeedSlider->setRange(1, 100);
+  ui_->animationSpeedSlider->setValue(50);
 
-  visualizationTimer.setInterval(ui->animationSpeedSlider->value());
+  visualization_timer_.setInterval(ui_->animationSpeedSlider->value());
 
   // animation checkbox
-  ui->animationCheckBox->setChecked(true);
+  ui_->animationCheckBox->setChecked(true);
   ////////////////////////////////
 }
 
 // destructor
 MainWindow::~MainWindow() {
-  delete ui;
-  delete gridMap;
+  delete ui_;
+  delete grid_map_;
   emit sendFinishStatus();
-  plannerThread_->wait();
+  planner_thread_->wait();
 }
 
 // map editing button slot
 void MainWindow::on_editMapButton_pressed() {
-  ui->editMapButton->setDefault(!mapEditingMode_);
-  mapEditingMode_ = !mapEditingMode_;
+  ui_->editMapButton->setDefault(!map_editing_mode_);
+  map_editing_mode_ = !map_editing_mode_;
 
-  // enable/disable other gui stuffs
+  // enable/disable other gui_ stuffs
   // grid size slider
-  ui->gridSlider->setEnabled(mapEditingMode_);
+  ui_->gridSlider->setEnabled(map_editing_mode_);
   // place config push button
-  ui->placeConfigButton->setEnabled(!mapEditingMode_);
+  ui_->placeConfigButton->setEnabled(!map_editing_mode_);
   // RUN push button
-  ui->runButton->setEnabled(!mapEditingMode_);
+  ui_->runButton->setEnabled(!map_editing_mode_);
   // animation checkbox
-  ui->animationCheckBox->setEnabled(!mapEditingMode_);
+  ui_->animationCheckBox->setEnabled(!map_editing_mode_);
   // animation speed slider
-  ui->animationSpeedSlider->setEnabled(!mapEditingMode_);
+  ui_->animationSpeedSlider->setEnabled(!map_editing_mode_);
   // obstacle number spinbox
-  ui->obstSpinBox->setEnabled(mapEditingMode_);
+  ui_->obstSpinBox->setEnabled(map_editing_mode_);
   // generate obstacle push button
-  ui->generateObstPushButton->setEnabled(mapEditingMode_);
+  ui_->generateObstPushButton->setEnabled(map_editing_mode_);
   // clear obstacle push button
-  ui->clearObstPushButton->setEnabled(mapEditingMode_);
+  ui_->clearObstPushButton->setEnabled(map_editing_mode_);
 
-  ui->obstSpinBox->setMaximum(gridMap->getFreeSpaceIdxs().size());
+  ui_->obstSpinBox->setMaximum(grid_map_->getFreeSpaceIdxs().size());
 
   // pass edit mode to grid map
-  gridMap->setEditingMapMode(mapEditingMode_);
+  grid_map_->setEditingMapMode(map_editing_mode_);
 }
 
 void MainWindow::on_gridSlider_sliderReleased() {
-  ui->obstSpinBox->setMaximum(gridMap->getFreeSpaceIdxs().size());
+  ui_->obstSpinBox->setMaximum(grid_map_->getFreeSpaceIdxs().size());
 }
 
 void MainWindow::on_generateObstPushButton_clicked() {
-  gridMap->generateObstacles(ui->obstSpinBox->value());
-  ui->obstSpinBox->setMaximum(gridMap->getFreeSpaceIdxs().size());
+  grid_map_->generateObstacles(ui_->obstSpinBox->value());
+  ui_->obstSpinBox->setMaximum(grid_map_->getFreeSpaceIdxs().size());
 }
 
 void MainWindow::on_clearObstPushButton_clicked() {
-  gridMap->clearObstacles();
-  ui->obstSpinBox->setMaximum(gridMap->getFreeSpaceIdxs().size());
+  grid_map_->clearObstacles();
+  ui_->obstSpinBox->setMaximum(grid_map_->getFreeSpaceIdxs().size());
 }
 
 // place configuration mode slot
 void MainWindow::on_placeConfigButton_pressed() {
-  ui->placeConfigButton->setDefault(!placeConfigMode_);
-  placeConfigMode_ = !placeConfigMode_;
+  ui_->placeConfigButton->setDefault(!place_config_mode_);
+  place_config_mode_ = !place_config_mode_;
 
-  // enable/disable gui stuffs
+  // enable/disable gui_ stuffs
   // start and goal radio buttons
-  ui->startConfigRadioButton->setEnabled(placeConfigMode_);
-  ui->goalConfigRadioButton->setEnabled(placeConfigMode_);
+  ui_->startConfigRadioButton->setEnabled(place_config_mode_);
+  ui_->goalConfigRadioButton->setEnabled(place_config_mode_);
 
-  if (isGuiReset_) {
+  if (is_gui_reset_) {
     // map editing button
-    ui->editMapButton->setEnabled(!placeConfigMode_);
+    ui_->editMapButton->setEnabled(!place_config_mode_);
     // RUN push button
-    ui->runButton->setEnabled(!placeConfigMode_);
+    ui_->runButton->setEnabled(!place_config_mode_);
     // animation checkbox
-    ui->animationCheckBox->setEnabled(!placeConfigMode_);
+    ui_->animationCheckBox->setEnabled(!place_config_mode_);
     // animation speed slider
-    ui->animationSpeedSlider->setEnabled(!placeConfigMode_);
+    ui_->animationSpeedSlider->setEnabled(!place_config_mode_);
     // make start radio button always selected first
-    ui->startConfigRadioButton->setChecked(true);
-    gridMap->setStartConfigRadioButton(true);
+    ui_->startConfigRadioButton->setChecked(true);
+    grid_map_->setStartConfigRadioButton(true);
   } else {
     // only allow to change goal vertex if planner is not reset yet
-    ui->startConfigRadioButton->setEnabled(false);
-    ui->startConfigRadioButton->setChecked(false);
-    ui->goalConfigRadioButton->setChecked(true);
-    gridMap->setStartConfigRadioButton(false);
+    ui_->startConfigRadioButton->setEnabled(false);
+    ui_->startConfigRadioButton->setChecked(false);
+    ui_->goalConfigRadioButton->setChecked(true);
+    grid_map_->setStartConfigRadioButton(false);
   }
 
-  gridMap->setPlaceConfigMode(placeConfigMode_);
+  grid_map_->setPlaceConfigMode(place_config_mode_);
 }
 
 void MainWindow::on_startConfigRadioButton_pressed() {
-  gridMap->setStartConfigRadioButton(true);
+  grid_map_->setStartConfigRadioButton(true);
 }
 
 void MainWindow::on_goalConfigRadioButton_pressed() {
-  gridMap->setStartConfigRadioButton(false);
+  grid_map_->setStartConfigRadioButton(false);
 }
 
 // this slot is called when the algorithm finshes and sends a signal
 // of visited vertices in order
 void MainWindow::receiveVisitedVerticesIdxOrder(
-    const QList<int> *visitedVerticesIdxOrder) {
-  for (auto idx : *visitedVerticesIdxOrder) {
-    visitedVerticesIdxOrder_.append(idx);
+    const QList<int> *visited_vertices_idx_order) {
+  for (auto idx : *visited_vertices_idx_order) {
+    visited_vertices_idx_order_.append(idx);
   }
 }
 
 // this slot is called when the algorithm finishes and sends a signal
 // of (child, parent) pairs hash map of vertices
 void MainWindow::receiveChildParentIdxs(
-    const std::unordered_map<int, int> *childParentIdxs) {
-  childParentIdxs_ = *childParentIdxs;
+    const std::unordered_map<int, int> *child_parent_idxs) {
+  child_parent_idxs_ = *child_parent_idxs;
 
   // if animation is not allowed
   // we visualize the visited vertices and path without using timer
-  if (!animatePlanning_) {
+  if (!animate_planning_) {
     // render visited grids
-    for (auto idx : visitedVerticesIdxOrder_) {
-      if (idx != startKeyIdx_ && idx != goalKeyIdx_) {
-        gridMap->getGridsList()->at(idx)->setVisitedGraphicsEffect();
+    for (auto idx : visited_vertices_idx_order_) {
+      if (idx != start_key_idx_ && idx != goal_key_idx_) {
+        grid_map_->getGridsList()->at(idx)->setVisitedGraphicsEffect();
       }
-     }
+    }
     // render path
-    while (childParentIdxs_[currentPathKeyIdx_] != startKeyIdx_) {
+    while (child_parent_idxs_[current_path_key_idx_] != start_key_idx_) {
       // find the parent vertex of current key (child)
-      currentPathKeyIdx_ = childParentIdxs_[currentPathKeyIdx_];
-      gridMap->getGridsList()->at(currentPathKeyIdx_)->setPathColor();
+      current_path_key_idx_ = child_parent_idxs_[current_path_key_idx_];
+      grid_map_->getGridsList()->at(current_path_key_idx_)->setPathColor();
     }
   }
 }
@@ -236,27 +236,28 @@ void MainWindow::receiveChildParentIdxs(
 void MainWindow::visualize() {
   // if we have idxs for visualization
   // start the visualization
-  if (visitedVerticesIdxOrder_.size() > 0) {
-    if (animatePlanning_) {
+  if (visited_vertices_idx_order_.size() > 0) {
+    if (animate_planning_) {
       // show all visited vertices
-      if (visualizationCurrentIdx_ <= visitedVerticesIdxOrder_.size() - 1) {
+      if (visualization_current_idx_ <=
+          visited_vertices_idx_order_.size() - 1) {
         // skip the start and goal vertex
-        if (visitedVerticesIdxOrder_.at(visualizationCurrentIdx_) !=
-                goalKeyIdx_ &&
-            visitedVerticesIdxOrder_.at(visualizationCurrentIdx_) !=
-                startKeyIdx_) {
-          gridMap->getGridsList()
-              ->at(visitedVerticesIdxOrder_.at(visualizationCurrentIdx_))
+        if (visited_vertices_idx_order_.at(visualization_current_idx_) !=
+                goal_key_idx_ &&
+            visited_vertices_idx_order_.at(visualization_current_idx_) !=
+                start_key_idx_) {
+          grid_map_->getGridsList()
+              ->at(visited_vertices_idx_order_.at(visualization_current_idx_))
               ->setVisitedGraphicsEffect();
         }
 
-        visualizationCurrentIdx_++;
+        visualization_current_idx_++;
       }
       // if done, visualize solution path until it reaches start vertex
-      else if (childParentIdxs_[currentPathKeyIdx_] != startKeyIdx_) {
+      else if (child_parent_idxs_[current_path_key_idx_] != start_key_idx_) {
         // find the parent vertex of current key (child)
-        currentPathKeyIdx_ = childParentIdxs_[currentPathKeyIdx_];
-        gridMap->getGridsList()->at(currentPathKeyIdx_)->setPathColor();
+        current_path_key_idx_ = child_parent_idxs_[current_path_key_idx_];
+        grid_map_->getGridsList()->at(current_path_key_idx_)->setPathColor();
       }
     }
   }
@@ -270,7 +271,7 @@ void MainWindow::on_comboBox_currentTextChanged(const QString &arg1) {
   emit sendFinishStatus();
 
   // create new thread obj
-  plannerThread_ = new QThread(this);
+  planner_thread_ = new QThread(this);
 
   // choose planners
   if (arg1 == "BFS") {
@@ -290,14 +291,14 @@ void MainWindow::on_comboBox_currentTextChanged(const QString &arg1) {
           SLOT(receiveResetStatus()), Qt::DirectConnection);
 
   // main function loop of the planner thread
-  connect(plannerThread_, SIGNAL(started()), planner_.get(), SLOT(process()));
+  connect(planner_thread_, SIGNAL(started()), planner_.get(), SLOT(process()));
 
-  // for quitting stuffs
+  // for qui_tting stuffs
   connect(this, SIGNAL(sendFinishStatus()), planner_.get(),
           SLOT(receiveFinishStatus()), Qt::DirectConnection);
-  connect(planner_.get(), SIGNAL(finished()), plannerThread_, SLOT(quit()),
+  connect(planner_.get(), SIGNAL(finished()), planner_thread_, SLOT(quit()),
           Qt::DirectConnection);
-  connect(plannerThread_, SIGNAL(finished()), plannerThread_,
+  connect(planner_thread_, SIGNAL(finished()), planner_thread_,
           SLOT(deleteLater()));
 
   // for visualization stuffs
@@ -312,40 +313,41 @@ void MainWindow::on_comboBox_currentTextChanged(const QString &arg1) {
 
   // move the current planner onto the thread
   // and initialize the algorithm
-  planner_.get()->moveToThread(plannerThread_);
-  plannerThread_->start();
+  planner_.get()->moveToThread(planner_thread_);
+  planner_thread_->start();
 }
 
 // RUN pushbutton clicked slot
 void MainWindow::on_runButton_clicked() {
   // emit a signal to algorithm slot containing gridmap information
-  emit sendGridMapInformation(gridMap);
+  emit sendGridMapInformation(grid_map_);
 
   // get the start and goal vertex indexes
-  goalKeyIdx_ = gridMap->getGridsList()->indexOf(gridMap->getGoalGrid());
-  startKeyIdx_ = gridMap->getGridsList()->indexOf(gridMap->getStartGrid());
-  currentPathKeyIdx_ = goalKeyIdx_;
+  goal_key_idx_ = grid_map_->getGridsList()->indexOf(grid_map_->getGoalGrid());
+  start_key_idx_ =
+      grid_map_->getGridsList()->indexOf(grid_map_->getStartGrid());
+  current_path_key_idx_ = goal_key_idx_;
 
   // disable the RUN button
-  ui->runButton->setEnabled(false);
+  ui_->runButton->setEnabled(false);
 
   // enable the RESET button
-  ui->resetButton->setEnabled(true);
+  ui_->resetButton->setEnabled(true);
 
   // disable the animation checkbox
-  ui->animationCheckBox->setEnabled(false);
+  ui_->animationCheckBox->setEnabled(false);
 
   // disable the map editing button
-  ui->editMapButton->setEnabled(false);
+  ui_->editMapButton->setEnabled(false);
 
   // animate based on checkbox
-  if (ui->animationCheckBox->isChecked()) {
-    visualizationTimer.start();
-    animatePlanning_ = true;
+  if (ui_->animationCheckBox->isChecked()) {
+    visualization_timer_.start();
+    animate_planning_ = true;
   } else
-    animatePlanning_ = false;
+    animate_planning_ = false;
 
-  isGuiReset_ = false;
+  is_gui_reset_ = false;
 }
 
 // RESET pushbutton clicked slot
@@ -354,57 +356,57 @@ void MainWindow::on_resetButton_clicked() {
   emit sendResetStatus();
 
   // stop the timer
-  visualizationTimer.stop();
+  visualization_timer_.stop();
 
   // enable the RUN button
-  ui->runButton->setEnabled(true);
+  ui_->runButton->setEnabled(true);
 
   // disable the RESET button
-  ui->resetButton->setEnabled(false);
+  ui_->resetButton->setEnabled(false);
 
   // enable the animation checkbox
-  ui->animationCheckBox->setEnabled(true);
+  ui_->animationCheckBox->setEnabled(true);
 
   // enable the map editing button
-  ui->editMapButton->setEnabled(true);
+  ui_->editMapButton->setEnabled(true);
 
   // make edit map button not selected
-  ui->editMapButton->setDefault(false);
-  mapEditingMode_ = false;
+  ui_->editMapButton->setDefault(false);
+  map_editing_mode_ = false;
 
   // make place config button not selected
-  ui->placeConfigButton->setDefault(false);
-  placeConfigMode_ = false;
+  ui_->placeConfigButton->setDefault(false);
+  place_config_mode_ = false;
   // checked start radio button as default
-  ui->startConfigRadioButton->setChecked(true);
+  ui_->startConfigRadioButton->setChecked(true);
   // disable start and goal radio buttons
-  ui->startConfigRadioButton->setEnabled(false);
-  ui->goalConfigRadioButton->setEnabled(false);
+  ui_->startConfigRadioButton->setEnabled(false);
+  ui_->goalConfigRadioButton->setEnabled(false);
 
   // remove all the rendered path and visited vertices
-  for (auto idx : visitedVerticesIdxOrder_) {
-    if (idx != startKeyIdx_ && idx != goalKeyIdx_)
-      gridMap->getGridsList()->at(idx)->setFreeSpaceGraphicsEffect();
+  for (auto idx : visited_vertices_idx_order_) {
+    if (idx != start_key_idx_ && idx != goal_key_idx_)
+      grid_map_->getGridsList()->at(idx)->setFreeSpaceGraphicsEffect();
   }
 
   // clear visualization related stuffs
-  visitedVerticesIdxOrder_.clear();
-  childParentIdxs_.clear();
-  visualizationCurrentIdx_ = 0;
+  visited_vertices_idx_order_.clear();
+  child_parent_idxs_.clear();
+  visualization_current_idx_ = 0;
 
-  isGuiReset_ = true;
+  is_gui_reset_ = true;
 }
 
 // slot for setting the animation speed
 void MainWindow::on_animationSpeedSlider_valueChanged(int value) {
-  visualizationTimer.setInterval(value);
+  visualization_timer_.setInterval(value);
 }
 
 // slot for enable/disable the animation
 void MainWindow::on_animationCheckBox_stateChanged(int arg1) {
   // if checked, enable speed slider
-  if (ui->animationCheckBox->isChecked())
-    ui->animationSpeedSlider->setEnabled(true);
+  if (ui_->animationCheckBox->isChecked())
+    ui_->animationSpeedSlider->setEnabled(true);
   else
-    ui->animationSpeedSlider->setEnabled(false);
+    ui_->animationSpeedSlider->setEnabled(false);
 }

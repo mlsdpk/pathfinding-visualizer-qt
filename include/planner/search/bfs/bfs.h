@@ -12,8 +12,8 @@ class BFS : public Planner {
   ~BFS();
 
  private:
-  Vertex* startVertex_;
-  Vertex* goalVertex_;
+  Vertex* start_vertex_;
+  Vertex* goal_vertex_;
   std::queue<Vertex*> frontier_;
 
   void onInit() override;

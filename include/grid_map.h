@@ -15,7 +15,7 @@ class GridMap : public QObject {
   GridMap() = default;
 
   /** \brief Parameterized Constructor. */
-  GridMap(int gridSize, QGraphicsScene *scene);
+  GridMap(int grid_size, QGraphicsScene *scene);
 
   /** \brief Destructor. */
   ~GridMap();
@@ -71,33 +71,33 @@ class GridMap : public QObject {
 
  private:
   /** \brief Grid size of the map. */
-  int gridSize_;
+  int grid_size_;
 
   /** \brief Total number of grids the map. */
-  int numberOfGrids_;
+  int number_of_grids_;
 
   /** \brief Pointer to start grid in the map. */
-  Grid *startGrid_;
+  Grid *start_grid_;
 
   /** \brief Pointer to goal grid in the map. */
-  Grid *goalGrid_;
+  Grid *goal_grid_;
 
   /** \brief Pointer to list of all the grids in the map. */
   QList<Grid *> *grids_;
 
   /** \brief List of free space indexes in the map. */
-  QList<int> freeSpaceIdxs_;
+  QList<int> free_space_idxs_;
 
   /** \brief Qt Graphics scene object. */
   QGraphicsScene *scene_;
 
   /** \brief Flag for indicating whether start config radio
    *  button is checked or not. */
-  bool isStartConfigButtonChecked_;
+  bool is_start_config_button_checked_;
 
   /** \brief Flag for indicating whether place config mode or not. */
-  bool placeConfigMode_;
+  bool place_config_mode_;
 
   /** \brief Flag for indicating whether editing map mode or not. */
-  bool editMapMode_;
+  bool edit_map_mode_;
 };

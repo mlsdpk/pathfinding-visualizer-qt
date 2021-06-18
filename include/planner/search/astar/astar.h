@@ -42,8 +42,8 @@ class ASTAR : public Planner {
   double L2_Distance(const Vertex* v1, const Vertex* v2);
 
  private:
-  Vertex* startVertex_;
-  Vertex* goalVertex_;
+  Vertex* start_vertex_;
+  Vertex* goal_vertex_;
   std::priority_queue<Vertex*, std::vector<Vertex*>, MinimumDistanceASTAR>
       frontier_;
   QList<Vertex*> vertices_;

@@ -1,7 +1,7 @@
 #include "grid.h"
 
 Grid::Grid(QObject *parent)
-    : QObject(parent), isOccupied_{false}, isStart_{false}, isGoal_{false} {
+    : QObject(parent), is_occupied_{false}, is_start_{false}, is_goal_{false} {
   setRect(0, 0, 100, 100);
 
   // create shadoweffect obj
@@ -13,47 +13,47 @@ Grid::Grid(QObject *parent)
 
 Grid::~Grid() {}
 
-bool Grid::isOccupied() const { return isOccupied_; }
+bool Grid::isOccupied() const { return is_occupied_; }
 
-bool Grid::isStart() const { return isStart_; }
+bool Grid::isStart() const { return is_start_; }
 
-bool Grid::isGoal() const { return isGoal_; }
+bool Grid::isGoal() const { return is_goal_; }
 
-QList<int> Grid::getNeighboursIdxs() const { return neighboursIdxs_; }
+QList<int> Grid::getNeighboursIdxs() const { return neighbours_idxs_; }
 
 void Grid::setOccupied() {
-  isOccupied_ = true;
-  isStart_ = false;
-  isGoal_ = false;
+  is_occupied_ = true;
+  is_start_ = false;
+  is_goal_ = false;
 
   setBrush(QBrush(QColor(0, 0, 0, 255), Qt::SolidPattern));
 }
 
 void Grid::setFree() {
-  isOccupied_ = false;
-  isStart_ = false;
-  isGoal_ = false;
+  is_occupied_ = false;
+  is_start_ = false;
+  is_goal_ = false;
 
   setBrush(QBrush(QColor(255, 255, 255, 255), Qt::SolidPattern));
 }
 
 void Grid::setStart() {
-  isStart_ = true;
-  isGoal_ = false;
-  isOccupied_ = false;
+  is_start_ = true;
+  is_goal_ = false;
+  is_occupied_ = false;
 
   setBrush(QBrush(QColor(51, 255, 51, 245), Qt::SolidPattern));
 }
 
 void Grid::setGoal() {
-  isStart_ = false;
-  isGoal_ = true;
-  isOccupied_ = false;
+  is_start_ = false;
+  is_goal_ = true;
+  is_occupied_ = false;
 
   setBrush(QBrush(QColor(255, 51, 51, 245), Qt::SolidPattern));
 }
 
-void Grid::setNeighbourIdx(int idx) { neighboursIdxs_.append(idx); }
+void Grid::setNeighbourIdx(int idx) { neighbours_idxs_.append(idx); }
 
 void Grid::setFreeSpaceGraphicsEffect() {
   QGraphicsDropShadowEffect *shadowEffect = new QGraphicsDropShadowEffect(this);

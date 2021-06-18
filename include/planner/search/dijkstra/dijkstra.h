@@ -26,8 +26,8 @@ class DIJKSTRA : public Planner {
   double L1_Distance(const Vertex* v1, const Vertex* v2);
 
  private:
-  Vertex* startVertex_;
-  Vertex* goalVertex_;
+  Vertex* start_vertex_;
+  Vertex* goal_vertex_;
   std::priority_queue<Vertex*, std::vector<Vertex*>, MinimumDistanceDIJKSTRA>
       frontier_;
 

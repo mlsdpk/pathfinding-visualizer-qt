@@ -57,13 +57,13 @@ class MainWindow : public QMainWindow {
    *  the search and sends a signal containing list of vertices' indexes in
    *  order. */
   void receiveVisitedVerticesIdxOrder(
-      const QList<int> *visitedVerticesIdxOrder);
+      const QList<int> *visited_vertices_idx_order);
 
   /** \brief This slot function is called when the planner finishes
    *  the search and sends a signal of hash map containing pairs of child and
    *  parent vertex indexes. */
   void receiveChildParentIdxs(
-      const std::unordered_map<int, int> *childParentIdxs);
+      const std::unordered_map<int, int> *child_parent_idxs);
 
   /** \brief This slot function is called when a timer sends a timeout signal.
    *  The purpose of the function is for visualizing the animation of planning
@@ -85,21 +85,21 @@ class MainWindow : public QMainWindow {
   /// \brief Private member variables. All the variable names might
   /// be understandable for their used cases
   //////////////////////////////////////////////////////////////////
-  Ui::MainWindow *ui;
-  QGraphicsScene *scene;
-  GridMap *gridMap;
+  Ui::MainWindow *ui_;
+  QGraphicsScene *scene_;
+  GridMap *grid_map_;
   std::unique_ptr<planner::Planner> planner_;
-  QThread *plannerThread_;
-  QTimer visualizationTimer;
-  QList<int> visitedVerticesIdxOrder_;
-  std::unordered_map<int, int> childParentIdxs_;
-  int visualizationCurrentIdx_;
-  int currentPathKeyIdx_;
-  int startKeyIdx_;
-  int goalKeyIdx_;
-  bool isVisualized_;
-  bool animatePlanning_;
-  bool mapEditingMode_;
-  bool placeConfigMode_;
-  bool isGuiReset_;
+  QThread *planner_thread_;
+  QTimer visualization_timer_;
+  QList<int> visited_vertices_idx_order_;
+  std::unordered_map<int, int> child_parent_idxs_;
+  int visualization_current_idx_;
+  int current_path_key_idx_;
+  int start_key_idx_;
+  int goal_key_idx_;
+  bool is_visualized_;
+  bool animate_planning_;
+  bool map_editing_mode_;
+  bool place_config_mode_;
+  bool is_gui_reset_;
 };
