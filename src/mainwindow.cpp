@@ -14,6 +14,8 @@ MainWindow::MainWindow(QWidget *parent)
       is_gui_reset_{true} {
   ui_->setupUi(this);
 
+  setFixedSize(717, 574);
+
   // create scene object and pass it to ui_
   // defaut gui_ parameters for now
   scene_ = new QGraphicsScene(this);
